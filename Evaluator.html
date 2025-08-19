@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toastmasters Timer</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: sans-serif;
+      background: #004165; /* Toastmasters blue */
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    #timerDisplay {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.2rem;
+      color: white;
+    }
+    #logo {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      width: 80px;
+      height: auto;
+    }
+    #Evaluator {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    #controls {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      padding: 8px 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 220px;
+    }
+    button {
+      font-size: 1rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="timerDisplay">0:00</div>
+  <img id="logo" src="./tm_logo.png" alt="Toastmasters Logo">
+  <div id="Evaluator">Evaluator:</div>
+
+  <div id="controls">
+    <input type="text" id="nameInput" placeholder="Enter Evaluator's Name">
+    <button onclick="startTimer()">Start</button>
+  </div>
+
+  <script>
+    let seconds = 0, timer;
+    const green = 2 * 60, yellow = 2.5 * 60, red = 3 * 60;
+
+    function startTimer() {
+      clearInterval(timer);
+      seconds = 0;
+
+      const name = document.getElementById("nameInput").value || "Unknown Evaluator";
+      document.getElementById("Evaluator").textContent = "Evaluator: " + name;
+      document.getElementById("Evaluator").style.display = "block";
+
+      // Hide inputs once name is entered
+      document.getElementById("controls").style.display = "none";
+
+      document.body.style.background = "#004165"; // Toastmasters blue at start
+
+      timer = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        document.getElementById("timerDisplay").textContent =
+          mins + ":" + (secs < 10 ? "0" : "") + secs;
+
+        if (seconds >= red) {
+          document.body.style.background = "red"; hideEvaluator();
+        } else if (seconds >= yellow) {
+          document.body.style.background = "yellow"; hideEvaluator();
+        } else if (seconds >= green) {
+          document.body.style.background = "green"; hideEvaluator();
+        }
+      }, 1000);
+    }
+
+    function hideEvaluator() {
+      document.getElementById("Evaluator").style.display = "none";
+    }
+  </script>
+</body>
+</html>
